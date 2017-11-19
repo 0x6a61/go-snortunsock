@@ -24,11 +24,11 @@ type EventStruct struct {
 	Timestamp       uint32 // unix timestamp
 }
 
-const ALERT_PACKET_SIZE = 65864
-const ALERT_MSG_LEN = 256
-const ALERT_PCAP_PACKET_HEADER_SIZE = 16
+const alert_packet_size = 65864
+const alert_msg_len = 256
+const alert_pcap_packet_header_size = 16
 
-const PACKET_SIZE = 65535
+const packet_size = 65535
 
 func Start_socket(socketName string) chan *Alert {
 	ch := make(chan *Alert)
@@ -45,7 +45,7 @@ func Start_socket(socketName string) chan *Alert {
 
 	go func() {
 		for {
-			p := make([]byte, ALERT_PACKET_SIZE)
+			p := make([]byte, alert_packet_size)
 			unix.Recvfrom(fd, p, 0)
 
 			event := parse(p)
@@ -72,11 +72,11 @@ func parseEvent(event []byte) *EventStruct {
 }
 
 func parse(alert []byte) *Alert {
-	alertmsg := alert[:ALERT_MSG_LEN]
-	offset := ALERT_MSG_LEN + ALERT_PCAP_PACKET_HEADER_SIZE + 20 // skip 20 unknown bytes
+	alertmsg := alert[:alert_msg_len]
+	offset := alert_msg_len + alert_pcap_packet_header_size + 20 // skip 20 unknown bytes
 
-	pkt := alert[offset:(offset + PACKET_SIZE)]
-	offset += PACKET_SIZE + 1
+	pkt := alert[offset:(offset + packet_size)]
+	offset += packet_size + 1
 
 	event := parseEvent(alert[offset:])
 
