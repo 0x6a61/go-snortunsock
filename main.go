@@ -1,6 +1,7 @@
 package snortunsock
 
 import (
+	"bytes"
 	"encoding/binary"
 	"log"
 
@@ -83,6 +84,6 @@ func parse(alert []byte) *Alert {
 	return &Alert{
 		Event:    event,
 		PcapData: pkt,
-		Name:     string(alertmsg),
+		Name:     string(bytes.Trim(alertmsg, "\x00")),
 	}
 }
