@@ -15,14 +15,14 @@ type Alert struct {
 }
 
 type EventStruct struct {
-	Sig_Generator   uint32
-	Sig_Id          uint32
-	Sig_Rev         uint32
-	Classification  uint32
-	Priority        uint32
-	Event_Id        uint32
-	Event_Reference uint32
-	Timestamp       uint32 // unix timestamp
+	SigGenerator   uint32
+	SigId          uint32
+	SigRev         uint32
+	Classification uint32
+	Priority       uint32
+	EventId        uint32
+	EventReference uint32
+	Timestamp      uint32 // unix timestamp
 }
 
 const alert_packet_size = 65864
@@ -31,7 +31,7 @@ const alert_pcap_packet_header_size = 16
 
 const packet_size = 65535
 
-func Start_socket(socketName string) chan *Alert {
+func StartSocket(socketName string) chan *Alert {
 	ch := make(chan *Alert)
 
 	unix.Unlink(socketName)
@@ -60,13 +60,13 @@ func Start_socket(socketName string) chan *Alert {
 func parseEvent(event []byte) *EventStruct {
 	eventStruct := &EventStruct{}
 
-	eventStruct.Sig_Generator, event = binary.LittleEndian.Uint32(event[:4]), event[4:] // pop 4 bytes
-	eventStruct.Sig_Id, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
-	eventStruct.Sig_Rev, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
+	eventStruct.SigGenerator, event = binary.LittleEndian.Uint32(event[:4]), event[4:] // pop 4 bytes
+	eventStruct.SigId, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
+	eventStruct.SigRev, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
 	eventStruct.Classification, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
 	eventStruct.Priority, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
-	eventStruct.Event_Id, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
-	eventStruct.Event_Reference, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
+	eventStruct.EventId, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
+	eventStruct.EventReference, event = binary.LittleEndian.Uint32(event[:4]), event[4:]
 	eventStruct.Timestamp = binary.LittleEndian.Uint32(event[:4])
 
 	return eventStruct

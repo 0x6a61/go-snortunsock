@@ -15,7 +15,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	for packet := range snortunsock.Start_socket(os.Args[1]) {
+	for packet := range snortunsock.StartSocket(os.Args[1]) {
 		fmt.Printf("Alert name: %s \n", packet.Name)
 		goPacket := gopacket.NewPacket(packet.PcapData, layers.LayerTypeEthernet, gopacket.Default)
 		fmt.Printf("Packet: %s", goPacket.String())
